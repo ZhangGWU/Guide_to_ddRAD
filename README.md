@@ -92,14 +92,14 @@ bwa index -p lycCHC_ref -a is /uufs/chpc.utah.edu/common/home/gompert-group3/dat
 ```
 
 Generate sam files for variant calling 
-change ref.ID in the file `runbwa.pl`
+change ref.ID in the file [runbwa.pl](runbwa.pl)
 ```
 module load perl
 perl runbwa.pl *fastq
 ```
 
 Convert sam file into bam file
-code file is sam2bam.sh 
+code file is sam2bam.sh, perl script is [sam2bam.pl](sam2bam.pl)
 ```
 module load perl
 perl sam2bam.pl *.sam
@@ -120,7 +120,7 @@ First round of filtering include a series of parameters including
 + allele frequency max = 0.95
 + missing number of individuals with no data = 153 ### 20% of individuals ###
 
-Here, for the purpose of population genomics, we set allele frequency cutoff as minor allele frequency <0.05. 
+Here, for the purpose of population genomics, we set allele frequency cutoff as minor allele frequency <0.05. Here is the two perl scripts you will use: [vcfFilter_CCN_1.9.pl](vcfFilter_CCN_1.9.pl), [depthCollector_1.9.pl](depthCollector_1.9.pl).
 Filtering round 1 code file: filter1.sh
 ```
 perl vcfFilter_CCN_1.9.pl variants.vcf #### need to chech the perl script to make sure the line search for loci matches the scaffold heads in your genome. 
@@ -144,7 +144,7 @@ length(which(dat$V3 > max))
 
 ```
 
-Filtering round 2 code file: filter3.sh ### depth filtering: maxCoverage= mean + 2sd : 37760.82, make sure everything is the same as vcfFilter_CCN_1.9.pl, expect for depth coverage
+Filtering round 2 code file: filter3.sh ### depth filtering: maxCoverage= mean + 2sd : 37760.82, make sure everything is the same as vcfFilter_CCN_1.9.pl, expect for depth coverage. Here is the [vcfFilter_CCN_1.9_more.pl](vcfFilter_CCN_1.9_more.pl)
 ```
 perl vcfFilter_CCN_1.9_more.pl filtered_firstRound_variants.vcf
 ```
@@ -203,6 +203,7 @@ mv filtered_secondRound_filtered_firstRound_variants.vcf doubleFiltered_variants
 /uufs/chpc.utah.edu/common/home/gompert-group3/data/lycaeides_chc_experiment/fastq/entropy/
 ```
 #### Genotype likelihoods from the variants
+Here is the perl script [vcf2mpgl_CCN_1.9.pl](vcf2mpgl_CCN_1.9.pl)
 ```
 perl vcf2mpgl_CCN_1.9.pl doubleFiltered_variants.vcf  ### need to change the expression in vcf2mpgl_CCN_1.9.pl to match the header of vcf
 
@@ -212,7 +213,7 @@ This generate doubleFiltered_variants.mpgl
 ###### You want to do another round of filtering if your genome assembly is a de novo assembly, in this filtering step, you are reducing the degree of linkage disequilibrium by only selection one locus per scaffold. Following the steps in [NextGenNotes_v4_2019.pdf](NextGenNotes_v4_2019.pdf).
 
 #### Transform the genotype likelihood files into a genotype matrix (point estimate of genotype) 
-This is the code file mpgl2peg.sh 
+This is the code file mpgl2peg.sh along with the perl script [gl2genest.pl](gl2genest.pl)
 ```
 #!/bin/sh
 #SBATCH --time=72:00:00
@@ -224,7 +225,7 @@ This is the code file mpgl2peg.sh
 
 perl gl2genest.pl doubleFiltered_variants.mpgl
 ```
-This will generate gl_doubleFiltered_variants.mpgl, this genotype matrix is used for generating ldak files. R script for ldak files is `generate ldak.R`. 
+This will generate gl_doubleFiltered_variants.mpgl, this genotype matrix is used for generating ldak files. R script for ldak files is [generate ldak.R](generate ldak.R). 
 
 #### Add the header, this is input file for entropy run ###
 
