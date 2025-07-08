@@ -88,7 +88,9 @@ conda activate YOURENVIRONMENTNAME ### this is to activate your environment wher
 Instructions on how to create your conda environment, install and load the programs you need, please ask chatgpt or any AI assistant. 
 #### Create index files from reference genome
 ```
-bwa index -p lycCHC_ref -a is /uufs/chpc.utah.edu/common/home/gompert-group3/data/LmelGenome/Lmel_dovetailPacBio_genome.fasta
+bwa index -p yourrefhead -a is /your/directory/to/reference/genome/file
+
+##for example bwa index -p lycCHC_ref -a is /uufs/chpc.utah.edu/common/home/gompert-group3/data/LmelGenome/Lmel_dovetailPacBio_genome.fasta
 ```
 
 Generate sam files for variant calling 
@@ -107,11 +109,14 @@ perl sam2bam.pl *.sam
 #### Call SNPS 
 Code file is variantcall.sh
 ```
-bcftools mpileup -d 8000 -o lyc_CHC.bcf -O b -I -f /uufs/chpc.utah.edu/common/home/gompert-group3/data/LmelGenome/Lmel_dovetailPacBio_genome.fasta aln*sorted.bam
+bcftools mpileup -d 8000 -o lyc_CHC.bcf -O b -I -f /your/directory/to/reference/genome/file aln*sorted.bam
+## example: bcftools mpileup -d 8000 -o lyc_CHC.bcf -O b -I -f /uufs/chpc.utah.edu/common/home/gompert-group3/data/LmelGenome/Lmel_dovetailPacBio_genome.fasta aln*sorted.bam
 ```
 Code file is variantcall2.sh
 ```
-bcftools call -c -V indels -v -p 0.05 -P 0.001 -o CHCvariants.vcf lyc_CHC.bcf
+bcftools call -c -V indels -v -p 0.05 -P 0.001 -o yourvariantfile.vcf lyc_CHC.bcf
+
+## example: bcftools call -c -V indels -v -p 0.05 -P 0.001 -o CHCvariants.vcf lyc_CHC.bcf
 ```
 ### 5. Filtering ######
 First round of filtering include a series of parameters including 
@@ -155,8 +160,8 @@ mv filtered_secondRound_filtered_firstRound_variants.vcf doubleFiltered_variants
 ### 6. Quantify coverage for individuals ###
 Code file for coverage counting: sbatch coverage.sh
 ```
-# Directory containing BAM files
-bam_dir="/uufs/chpc.utah.edu/common/home/gompert-group3/data/lycaeides_chc_experiment/fastq/vcall"
+# Directory containing BAM files, example: bam_dir="/uufs/chpc.utah.edu/common/home/gompert-group3/data/lycaeides_chc_experiment/fastq/vcall"
+bam_dir="/your/bam/file/directory"
 
 # Output file name
 output_file="total_coverage.txt"
