@@ -32,7 +32,7 @@ module load perl
 
 perl ../RunParseFork.pl x*
 ```
-[RunParseFork.pl](RunParseFork.pl) is attached in the depository. You want to include your bash headers in your own file. 
+[RunParseFork.pl](RunParseFork.pl) is attached in the depository. You want to include your bash headers in your own file. Here you also want to make sure parallel (Parallel::ForkManager) is running
 
 #### Get individual ID file 
 ```
