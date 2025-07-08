@@ -32,7 +32,7 @@ module load perl
 
 perl ../RunParseFork.pl x*
 ```
-`RunParseForkl.pl` is attached in the depository. You want to include your bash headers in your own file. 
+[RunParseForkl.pl](RunParseForkl.pl) is attached in the depository. You want to include your bash headers in your own file. 
 
 #### Get individual ID file 
 ```
